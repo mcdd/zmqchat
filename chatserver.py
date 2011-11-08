@@ -13,9 +13,15 @@ def run_server():
 
     i = 0
     while True:
-        msg = reqs.recv()
-        print "got message, relaying to other nodes"
-        pub.send(msg)
+        try:
+            msg = reqs.recv()
+        except KeyboardInterrupt:
+            print "\nClosing gracefully..."
+            return
+        else:
+            print "got message, relaying to other nodes"
+            pub.send(msg)
+            
 
 if __name__ == '__main__':
     run_server()
