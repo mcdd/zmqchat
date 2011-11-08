@@ -17,7 +17,11 @@ def run_client():
     plr.register(sub, zmq.POLLIN)
 
     while True:
-        fds = dict(plr.poll())
+        try:
+            fds = dict(plr.poll())
+        except KeyboardInterrupt:
+            print "\nClosing gracefully..."
+            return
 
         if stdin.fileno() in fds:
             push.send(stdin.readline())
