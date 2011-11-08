@@ -8,11 +8,14 @@ def run_server():
     pub = ctx.socket(zmq.PUB)
     pub.bind('tcp://*:4455')
 
+    reqs = ctx.socket(zmq.PULL)
+    reqs.bind('tcp://*:4456')
+
     i = 0
     while True:
-        pub.send("message %d" % i)
-        i += 1
-        sleep(1)
+        msg = reqs.recv()
+        print "got message, relaying to other nodes"
+        pub.send(msg)
 
 if __name__ == '__main__':
     run_server()
