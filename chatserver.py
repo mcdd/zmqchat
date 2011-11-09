@@ -6,6 +6,8 @@ from time import sleep
 
 class ChatServer(object):
     def __init__(self):
+        """Sets up the chat server. Basically gets the sockets ready but don't do any
+        real work yet."""
         self.ctx = zmq.Context()
         self.pub = self.ctx.socket(zmq.PUB)
         self.pub.bind('tcp://*:4455')
@@ -14,6 +16,7 @@ class ChatServer(object):
         self.reqs.bind('tcp://*:4456')
 
     def run(self):
+        """Starts the message processing loop."""
         while True:
             try:
                 msg = self.reqs.recv()
