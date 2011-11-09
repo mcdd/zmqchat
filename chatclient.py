@@ -24,7 +24,8 @@ def run_client():
             return
 
         if stdin.fileno() in fds:
-            push.send(stdin.readline())
+            line = stdin.readline()[:-1] # trim newline char
+            push.send(line)
 
         if sub in fds:
             msg = sub.recv()
