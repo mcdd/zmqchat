@@ -11,7 +11,6 @@ def run_server():
     reqs = ctx.socket(zmq.PULL)
     reqs.bind('tcp://*:4456')
 
-    i = 0
     while True:
         try:
             msg = reqs.recv()
