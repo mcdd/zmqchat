@@ -3,28 +3,31 @@
 import zmq
 from time import sleep
 
-def run_server():
-    ctx = zmq.Context()
-    pub = ctx.socket(zmq.PUB)
-    pub.bind('tcp://*:4455')
 
-    reqs = ctx.socket(zmq.PULL)
-    reqs.bind('tcp://*:4456')
+class ChatServer(object):
+    def __init__(self):
+        self.ctx = zmq.Context()
+        self.pub = self.ctx.socket(zmq.PUB)
+        self.pub.bind('tcp://*:4455')
 
-    while True:
-        try:
-            msg = reqs.recv()
-        except KeyboardInterrupt:
-            print "\nClosing gracefully..."
-            return
+        self.reqs = self.ctx.socket(zmq.PULL)
+        self.reqs.bind('tcp://*:4456')
 
-        try:
-            action, args = msg.split(' ', 1)
-        except ValueError:
-            print "discarding invalid message: %r" % (msg,)
-            continue
-        print "TODO: handle message"
+    def run(self):
+        while True:
+            try:
+                msg = self.reqs.recv()
+            except KeyboardInterrupt:
+                print "\nClosing gracefully..."
+                return
+
+            try:
+                action, args = msg.split(' ', 1)
+            except ValueError:
+                print "discarding invalid message: %r" % (msg,)
+                continue
+            print "TODO: handle message"
 
 
 if __name__ == '__main__':
-    run_server()
+    ChatServer().run()
