@@ -3,6 +3,10 @@
 import zmq
 from time import sleep
 
+def chat_action(f):
+    """Decorator for chat action handlers."""
+    f.chat_action = True
+    return f
 
 class ChatServer(object):
     def __init__(self):
@@ -29,7 +33,23 @@ class ChatServer(object):
             except ValueError:
                 print "discarding invalid message: %r" % (msg,)
                 continue
-            print "TODO: handle message"
+
+            action_func = self.get_action(action)
+            if not action_func:
+                print "Don't know how to handle action %r, args %r" % (action, args)
+                continue
+            action_func(args)
+
+    def get_action(self, action):
+        """Try to find a handler for the specified action."""
+        if not hasattr(self, action):
+            return None
+
+        x = getattr(self, action)
+        if not hasattr(x, 'chat_action'):
+            return None
+
+        return x
 
 
 if __name__ == '__main__':
