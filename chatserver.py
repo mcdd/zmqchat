@@ -51,6 +51,11 @@ class ChatServer(object):
 
         return x
 
+    @chat_action
+    def say(self, args):
+        target, source, message = args.split(' ', 2)
+        self.pub.send("say %(target)s %(source)s %(message)s" % locals())
+
 
 if __name__ == '__main__':
     ChatServer().run()
