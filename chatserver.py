@@ -17,10 +17,14 @@ def run_server():
         except KeyboardInterrupt:
             print "\nClosing gracefully..."
             return
-        else:
-            print "got message, relaying to other nodes"
-            pub.send(msg)
-            
+
+        try:
+            action, args = msg.split(' ', 1)
+        except ValueError:
+            print "discarding invalid message: %r" % (msg,)
+            continue
+        print "TODO: handle message"
+
 
 if __name__ == '__main__':
     run_server()
